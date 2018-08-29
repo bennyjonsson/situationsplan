@@ -1,9 +1,27 @@
-require(["esri/map", "esri/dijit/Search", "esri/layers/FeatureLayer",  "esri/InfoTemplate", "dojo/domReady!", "dojo/on"], 
-function (Map, Search, FeatureLayer,InfoTemplate, domReady, on) {
+require(["esri/SpatialReference", "esri/map", "esri/dijit/Search", "esri/layers/FeatureLayer",  "esri/InfoTemplate", "dojo/domReady!", "dojo/on", "esri/basemaps"], 
+function (SpatialReference, Map, Search, FeatureLayer,InfoTemplate, domReady, on, esriBasemaps) {
+
+    // error
+    esriBasemaps.baskarta = {
+        baseMapLayers: [{url: "https://platsen.helsingborg.se/arcgis/rest/services/Bygglov/situationsplan/MapServer"}
+        ],
+        thumbnailUrl: "https://www.example.com/images/thumbnail_2014-11-25_61051.png",
+        title: "baskarta"
+    };
+    
+    // works
+    esriBasemaps.delorme = {
+        baseMapLayers: [{url: "https://services.arcgisonline.com/ArcGIS/rest/services/Specialty/DeLorme_World_Base_Map/MapServer"}
+        ],
+        thumbnailUrl: "https://www.example.com/images/thumbnail_2014-11-25_61051.png",
+        title: "Delorme"
+      };    
+
     var map = new Map("map", {
         basemap: "gray",
+        //spatialReference: new SpatialReference(3008),
         center: [12.7, 56.03], // lon, lat
-        zoom: 15
+        zoom: 12
     });
 
     // Used to store searches, active property, jobs and more while the user navigates
