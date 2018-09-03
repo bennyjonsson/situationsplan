@@ -59,12 +59,14 @@ function (SpatialReference, Map, Search, FeatureLayer,InfoTemplate, domReady, on
     search.startup();
 
     function submitPrintJob() {
+        $('#print-result').append('<div id="loader" class="lds-dual-ring"></div>')
         $.get({            
             url: "https://gisdata.helsingborg.se/arcgis/rest/services/Utskriftstjanster/PrintSituationsplan/GPServer/Export%20Web%20Map/submitJob?f=json&Web_Map_as_JSON=" + webMapAsEncodedJSON() + "&Format=&Layout_Template=" + template() + "&printFlag=true",
             success(result) {
                 console.log("Successfully submited job!");
                 console.log(result)
-                window.pollInterval = setInterval(function() { pollForPrintResult(result.jobId) }, 500);                
+                //window.pollInterval = setInterval(function() { pollForPrintResult(result.jobId) }, 500);                
+                pollForPrintResult(result.jobId)
                 window.state.jobs[result.jobId] = window.state.selectedProperty;
             },
             failure(error) {
@@ -127,23 +129,24 @@ function (SpatialReference, Map, Search, FeatureLayer,InfoTemplate, domReady, on
     }
 
     function pollForPrintResult(jobId) {
-        console.log("polling!");
+        console.log("polling!");        
         $.get({
             url: "https://gisdata.helsingborg.se/arcgis/rest/services/Utskriftstjanster/PrintSituationsplan/GPServer/Export%20Web%20Map/jobs/" + jobId + "/results/Output_File?f=json&returnType=data&dojo.preventCache=1533818509983",
             success(result) {                
                 // 400 response gives 200 status hence we need to check for errors also in the success section
-                if(result.hasOwnProperty('error')) {                    
+                if(result.hasOwnProperty('error')) {
+                    setTimeout(function() { pollForPrintResult(jobId) }, 500);                    
                     return
                 }
-
-                clearInterval(window.pollInterval);
-                console.log(result)
+                
                 $('#print-result').append("<a target='_blank' href='" + result.value.url + "'>" + window.state.jobs[jobId] + "</a></br>")
+                $('.lds-dual-ring').remove()
                 
             },
             failure(error) {
                 alert("There was an error!")
-                console.log("ERROR!", error)                                
+                console.log("ERROR!", error)
+                $('.lds-dual-ring').remove()                                
             }
         })        
     }
@@ -158,5 +161,11 @@ function (SpatialReference, Map, Search, FeatureLayer,InfoTemplate, domReady, on
         if(e.target.id == "download-pdf") {
             submitPrintJob();
         }
-    });    
+    });
 });
+
+
+// Splash popup?
+// Custom basemap (EPSG:3008)
+// Spinner
+// The setInterval solution breaks when requests are slower than 500 ms
