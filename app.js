@@ -35,13 +35,13 @@ function (SpatialReference, Map, Search, FeatureLayer,InfoTemplate, domReady, on
             outFields: ["*"],
             infoTemplate: new InfoTemplate("${RealEstateName}", `
                 <p>Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext </p>
-                <select>
-                    <option>500</option>
-                    <option>200</option>
+                <select id="scale">
+                    <option value="500">500</option>
+                    <option value="200">200</option>
                 </select>
-                <select>
-                    <option>A4</option>
-                    <option>A3</option>
+                <select id="template">
+                    <option value="A4">A4</option>
+                    <option value="A3">A3</option>
                 </select>
                 <button id='download-pdf'>Ladda ner PDF</button>
                 <div id="print-result"></div>
@@ -60,7 +60,7 @@ function (SpatialReference, Map, Search, FeatureLayer,InfoTemplate, domReady, on
 
     function submitPrintJob() {
         $.get({            
-            url: "https://gisdata.helsingborg.se/arcgis/rest/services/Utskriftstjanster/PrintSituationsplan/GPServer/Export%20Web%20Map/submitJob?f=json&Web_Map_as_JSON=" + webMapAsEncodedJSON() + "&Format=&Layout_Template=anders_template&printFlag=true",
+            url: "https://gisdata.helsingborg.se/arcgis/rest/services/Utskriftstjanster/PrintSituationsplan/GPServer/Export%20Web%20Map/submitJob?f=json&Web_Map_as_JSON=" + webMapAsEncodedJSON() + "&Format=&Layout_Template=" + template() + "&printFlag=true",
             success(result) {
                 console.log("Successfully submited job!");
                 console.log(result)
@@ -83,7 +83,7 @@ function (SpatialReference, Map, Search, FeatureLayer,InfoTemplate, domReady, on
                     "spatialReference":{  
                         "wkid":102100
                     },
-                    "scale":500
+                    "scale": parseInt($("#scale").val())
                 },
                 "operationalLayers":[  
                     {  
@@ -106,8 +106,8 @@ function (SpatialReference, Map, Search, FeatureLayer,InfoTemplate, domReady, on
                     "titleText":"",
                     "authorText":"",
                     "copyrightText":"",
-                    "customTextElements":[  
-            
+                    "customTextElements":[
+                        {"fastighet": window.state.selectedProperty}
                     ],
                     "scaleBarOptions":{  
             
@@ -120,6 +120,10 @@ function (SpatialReference, Map, Search, FeatureLayer,InfoTemplate, domReady, on
                 }
             }
         ))
+    }
+
+    function template() {
+        return $("#template").val();
     }
 
     function pollForPrintResult(jobId) {
