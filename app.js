@@ -1,6 +1,29 @@
-require(["esri/SpatialReference", "esri/map", "esri/dijit/Search", "esri/layers/FeatureLayer",  "esri/InfoTemplate", "dojo/domReady!", "dojo/on", "esri/basemaps"], 
-function (SpatialReference, Map, Search, FeatureLayer,InfoTemplate, domReady, on, esriBasemaps) {
-
+require([
+    "esri/SpatialReference",
+    "esri/map",
+    "esri/dijit/Search",
+    "esri/layers/FeatureLayer", 
+    "esri/InfoTemplate",
+    "dojo/domReady!",
+    "dojo/on",
+    "esri/basemaps",
+    // Custom modules
+    "print.js",
+    "config.js"
+], 
+function (
+    SpatialReference,
+    Map,
+    Search,
+    FeatureLayer,
+    InfoTemplate,
+    domReady,
+    on,
+    esriBasemaps,
+    // Custom modules
+    Print,
+    Config
+) {
     // error
     esriBasemaps.baskarta = {
         baseMapLayers: [{url: "https://platsen.helsingborg.se/arcgis/rest/services/Bygglov/situationsplan/MapServer"}
@@ -30,30 +53,56 @@ function (SpatialReference, Map, Search, FeatureLayer,InfoTemplate, domReady, on
     }
 
     var search = new Search({
-        sources: [{
-            featureLayer: new FeatureLayer("https://gisdata2.helsingborg.se/arcgis/rest/services/Fastigheter/Adress_till_fastighet/FeatureServer/0", {
-            outFields: ["*"],
-            infoTemplate: new InfoTemplate("${RealEstateName}", `
-                <p>Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext </p>
-                <select id="scale">
-                    <option value="500">500</option>
-                    <option value="200">200</option>
-                </select>
-                <select id="template">
-                    <option value="A4">A4</option>
-                    <option value="A3">A3</option>
-                </select>
-                <button id='download-pdf'>Ladda ner PDF</button>
-                <div id="print-result"></div>
-            `)}),
-            outFields: ["RealEstateName","Name"],
-            displayField: "RealEstateName",
-            suggestionTemplate: "FASTIGHET ${RealEstateName}: ADRESS ${Name}",
-            name: "${RealEstateName}",
-            placeholder: "example: Shawn Smith",
-            enableSuggestions: true
-        }],
-        map: map
+        sources: [
+            {
+                featureLayer: new FeatureLayer("https://gisdata2.helsingborg.se/arcgis/rest/services/Fastigheter/Alla_fastigheter/FeatureServer/0", {
+                outFields: ["*"],
+                infoTemplate: new InfoTemplate("${fastighet}", `
+                    <p>Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext </p>
+                    <select id="scale">
+                        <option value="500">500</option>
+                        <option value="200">200</option>
+                    </select>
+                    <select id="template">
+                        <option value="A4">A4</option>
+                        <option value="A3">A3</option>
+                    </select>
+                    <button id='download-pdf'>Ladda ner PDF</button>
+                    <div id="print-result"></div>
+                `)}),
+                outFields: ["fastighet"],
+                displayField: "fastighet",
+                suggestionTemplate: "FASTIGHET ${fastighet}",
+                name: "Fastighet",
+                placeholder: "Sök fastighet eller adress...",
+                enableSuggestions: true
+            },            
+            {
+                featureLayer: new FeatureLayer("https://gisdata2.helsingborg.se/arcgis/rest/services/Fastigheter/Adress_till_fastighet/FeatureServer/0", {
+                outFields: ["*"],
+                infoTemplate: new InfoTemplate("Adress", `
+                    <p>Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext </p>
+                    <select id="scale">
+                        <option value="500">500</option>
+                        <option value="200">200</option>
+                    </select>
+                    <select id="template">
+                        <option value="A4">A4</option>
+                        <option value="A3">A3</option>
+                    </select>
+                    <button id='download-pdf'>Ladda ner PDF</button>
+                    <div id="print-result"></div>
+                `)}),
+                outFields: ["Name", "RealEstateName"],
+                displayField: "Name",
+                suggestionTemplate: "FASTIGHET ${RealEstateName}: ADRESS ${Name}",
+                name: "Adress",
+                placeholder: "Sök fastighet eller adress...",
+                enableSuggestions: true
+            }
+    ],
+        allPlaceholder: "Sök fastighet eller adress ...",
+        map: map,
     }, "search");
 
     search.startup();
@@ -167,5 +216,4 @@ function (SpatialReference, Map, Search, FeatureLayer,InfoTemplate, domReady, on
 
 // Splash popup?
 // Custom basemap (EPSG:3008)
-// Spinner
-// The setInterval solution breaks when requests are slower than 500 ms
+// Both adress and fastighet in search
