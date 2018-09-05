@@ -151,7 +151,7 @@ function (
                     "spatialReference":{  
                         "wkid":102100
                     },
-                    "scale": $("#scale").val()
+                    "scale": parseInt($("#scale").val())
                 },
                 "operationalLayers":[  
                     {  
