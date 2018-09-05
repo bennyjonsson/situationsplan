@@ -8,7 +8,6 @@ require([
     "dojo/on",
     "esri/basemaps",
     // Custom modules
-    "print.js",
     "config.js"
 ], 
 function (
@@ -21,7 +20,6 @@ function (
     on,
     esriBasemaps,
     // Custom modules
-    Print,
     Config
 ) {
     // error
@@ -55,7 +53,7 @@ function (
     var search = new Search({
         sources: [
             {
-                featureLayer: new FeatureLayer("https://gisdata2.helsingborg.se/arcgis/rest/services/Fastigheter/Alla_fastigheter/FeatureServer/0", {
+                featureLayer: new FeatureLayer(Config.fastighetFeatureServer, {
                 outFields: ["*"],
                 infoTemplate: new InfoTemplate("${fastighet}", `
                     <p>Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext </p>
@@ -78,9 +76,9 @@ function (
                 enableSuggestions: true
             },            
             {
-                featureLayer: new FeatureLayer("https://gisdata2.helsingborg.se/arcgis/rest/services/Fastigheter/Adress_till_fastighet/FeatureServer/0", {
+                featureLayer: new FeatureLayer(Config.adressFeatureServer, {
                 outFields: ["*"],
-                infoTemplate: new InfoTemplate("Adress", `
+                infoTemplate: new InfoTemplate("${RealEstateName}", `
                     <p>Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext </p>
                     <select id="scale">
                         <option value="500">500</option>
@@ -110,7 +108,7 @@ function (
     function submitPrintJob() {
         $('#print-result').append('<div id="loader" class="lds-dual-ring"></div>')
         $.get({            
-            url: "https://gisdata.helsingborg.se/arcgis/rest/services/Utskriftstjanster/PrintSituationsplan/GPServer/Export%20Web%20Map/submitJob?f=json&Web_Map_as_JSON=" + webMapAsEncodedJSON() + "&Format=&Layout_Template=" + template() + "&printFlag=true",
+            url: Config.printingService + "/GPServer/Export%20Web%20Map/submitJob?f=json&Web_Map_as_JSON="+ webMapAsEncodedJSON() + "&Format=&Layout_Template=" + $("#template").val() + "&printFlag=true",
             success(result) {
                 console.log("Successfully submited job!");
                 console.log(result)
@@ -143,7 +141,7 @@ function (
                         "opacity":1,
                         "minScale":0,
                         "maxScale":0,
-                        "url":"https://platsen.helsingborg.se/arcgis/rest/services/Bygglov/situationsplan/MapServer"
+                        "url": Config.mapToPrint
                     }
                 ],
                 "exportOptions":{  
@@ -173,18 +171,14 @@ function (
         ))
     }
 
-    function template() {
-        return $("#template").val();
-    }
-
     function pollForPrintResult(jobId) {
         console.log("polling!");        
         $.get({
-            url: "https://gisdata.helsingborg.se/arcgis/rest/services/Utskriftstjanster/PrintSituationsplan/GPServer/Export%20Web%20Map/jobs/" + jobId + "/results/Output_File?f=json&returnType=data&dojo.preventCache=1533818509983",
+            url: Config.printingService + "/GPServer/Export%20Web%20Map/jobs/" + jobId + "/results/Output_File?f=json&returnType=data&dojo.preventCache=1533818509983",
             success(result) {                
                 // 400 response gives 200 status hence we need to check for errors also in the success section
                 if(result.hasOwnProperty('error')) {
-                    setTimeout(function() { pollForPrintResult(jobId) }, 500);                    
+                    setTimeout(function() { pollForPrintResult(jobId) }, 5000);                    
                     return
                 }
                 
@@ -201,8 +195,18 @@ function (
     }
 
 
-    on(search,'select-result', function(e) {        
-        window.state.selectedProperty = e.result.name;
+    // Keep track of the selected object
+    on(search,'select-result', function(e) {
+        console.log(e.result)
+        
+        // Case Adress
+        if(e.result.feature._layer.fastighet) {
+            window.state.selectedProperty = e.result.feature.attributes.fastighet;    
+            return
+        }
+
+        // Case Fastighet
+        window.state.selectedProperty = e.result.feature.attributes.RealEstateName;    
     });
 
     // Cant fetch elements in infoTemplate on the fly, resort
@@ -216,4 +220,4 @@ function (
 
 // Splash popup?
 // Custom basemap (EPSG:3008)
-// Both adress and fastighet in search
+// How distinguish between job queued/processing and job failed? Both have code 400 ?
