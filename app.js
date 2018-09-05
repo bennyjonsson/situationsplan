@@ -7,6 +7,8 @@ require([
     "dojo/domReady!",
     "dojo/on",
     "esri/basemaps",
+    "esri/tasks/PrintTask",
+    "esri/tasks/PrintParameters",
     // Custom modules
     "config.js"
 ], 
@@ -19,6 +21,8 @@ function (
     domReady,
     on,
     esriBasemaps,
+    PrintTask,
+    PrintParameters,
     // Custom modules
     Config
 ) {
@@ -106,6 +110,27 @@ function (
     search.startup();
 
     function submitPrintJob() {
+        /*
+        var printTask = new PrintTask({
+            url: Config.printingService  + "/GPServer/Export%20Web%20Map"
+        });
+
+        var params = new PrintParameters();
+        params.map = map;
+        printTask.execute(params, function() {
+            console.log("Success!")
+        }, function() {
+            console.log("Fail")
+        });
+        
+        return;
+        */
+
+
+
+
+
+
         $('#print-result').append('<div id="loader" class="lds-dual-ring"></div>')
         $.get({            
             url: Config.printingService + "/GPServer/Export%20Web%20Map/submitJob?f=json&Web_Map_as_JSON="+ webMapAsEncodedJSON() + "&Format=&Layout_Template=" + $("#template").val() + "&printFlag=true",
