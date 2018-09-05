@@ -9,6 +9,7 @@ require([
     "esri/basemaps",
     "esri/tasks/PrintTask",
     "esri/tasks/PrintParameters",
+    "esri/tasks/DataFile",
     // Custom modules
     "config.js"
 ], 
@@ -23,25 +24,10 @@ function (
     esriBasemaps,
     PrintTask,
     PrintParameters,
+    DataFile,
     // Custom modules
     Config
 ) {
-    // error
-    esriBasemaps.baskarta = {
-        baseMapLayers: [{url: "https://platsen.helsingborg.se/arcgis/rest/services/Bygglov/situationsplan/MapServer"}
-        ],
-        thumbnailUrl: "https://www.example.com/images/thumbnail_2014-11-25_61051.png",
-        title: "baskarta"
-    };
-    
-    // works
-    esriBasemaps.delorme = {
-        baseMapLayers: [{url: "https://services.arcgisonline.com/ArcGIS/rest/services/Specialty/DeLorme_World_Base_Map/MapServer"}
-        ],
-        thumbnailUrl: "https://www.example.com/images/thumbnail_2014-11-25_61051.png",
-        title: "Delorme"
-      };    
-
     var map = new Map("map", {
         basemap: "gray",
         //spatialReference: new SpatialReference(3008),
@@ -110,40 +96,31 @@ function (
     search.startup();
 
     function submitPrintJob() {
-        /*
-        var printTask = new PrintTask({
-            url: Config.printingService  + "/GPServer/Export%20Web%20Map"
-        });
+        var selectedProperty = window.state.selectedProperty;
+        var printTask = new PrintTask(Config.printingService  + "/GPServer/Export%20Web%20Map");
+
+        $('#print-result').append('<div id="loader" class="lds-dual-ring"></div>')
 
         var params = new PrintParameters();
         params.map = map;
-        printTask.execute(params, function() {
-            console.log("Success!")
-        }, function() {
-            console.log("Fail")
-        });
+        params.extraParameters = {}
+        params.extraParameters.Web_Map_as_JSON = webMapAsJSON()
+        var file = new DataFile()
+        file.url = selectedProperty;
+        params.extraParameters.Output_File = selectedProperty; //file;
+        params.template = $("#template").val()
         
-        return;
-        */
-
-        $('#print-result').append('<div id="loader" class="lds-dual-ring"></div>')
-        $.get({            
-            url: Config.printingService + "/GPServer/Export%20Web%20Map/submitJob?f=json&Web_Map_as_JSON="+ webMapAsEncodedJSON() + "&Format=&Layout_Template=" + $("#template").val() + "&printFlag=true",
-            success(result) {
-                console.log("Successfully submited job!");
-                window.state.jobs[result.jobId] = window.state.selectedProperty;
-                pollForPrintResult(result.jobId)
-                
-            },
-            failure(error) {
-                alert("Could not submit job!");
-                console.log("ERROR!", error)
-            }
-        })
+        printTask.execute(params, function(result) {
+            console.log("Success!", result)
+                $('#print-result').append("<a target='_blank' href='" + result.url + "'>" + selectedProperty + "</a></br>")
+                $('.lds-dual-ring').remove()            
+        }, function(error) {
+            console.log("Fail", error)
+        });
     }
     
-    function webMapAsEncodedJSON() {        
-        return encodeURI(JSON.stringify(
+    function webMapAsJSON() {        
+        return JSON.stringify(
             {  
                 "mapOptions":{  
                     "showAttribution":false,
@@ -187,32 +164,8 @@ function (
                     }
                 }
             }
-        ))
+        )
     }
-
-    function pollForPrintResult(jobId) {
-        console.log("polling!");        
-        $.get({
-            url: Config.printingService + "/GPServer/Export%20Web%20Map/jobs/" + jobId + "/results/Output_File?f=json&returnType=data&dojo.preventCache=1533818509983",
-            success(result) {                
-                // 400 response gives 200 status hence we need to check for errors also in the success section
-                if(result.hasOwnProperty('error')) {
-                    setTimeout(function() { pollForPrintResult(jobId) }, 5000);                    
-                    return
-                }
-                
-                $('#print-result').append("<a target='_blank' href='" + result.value.url + "'>" + window.state.jobs[jobId] + "</a></br>")
-                $('.lds-dual-ring').remove()
-                
-            },
-            failure(error) {
-                alert("There was an error!")
-                console.log("ERROR!", error)
-                $('.lds-dual-ring').remove()                                
-            }
-        })        
-    }
-
 
     // Keep track of the selected object
     on(search,'select-result', function(e) {        
@@ -234,9 +187,9 @@ function (
     });
 });
 
-// Replace poll method
-    // https://developers.arcgis.com/javascript/3/jsapi/printtask-amd.html
+// Set file 
+    // DataFile in Output_File no effect!
 // Splash popup?
-    // Separate
+    // https://dojotoolkit.org/reference-guide/1.10/dijit/Dialog.html
 // Remove basemap
     // https://developers.arcgis.com/javascript/3/jsapi/arcgisdynamicmapservicelayer-amd.html
