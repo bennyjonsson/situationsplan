@@ -126,20 +126,14 @@ function (
         return;
         */
 
-
-
-
-
-
         $('#print-result').append('<div id="loader" class="lds-dual-ring"></div>')
         $.get({            
             url: Config.printingService + "/GPServer/Export%20Web%20Map/submitJob?f=json&Web_Map_as_JSON="+ webMapAsEncodedJSON() + "&Format=&Layout_Template=" + $("#template").val() + "&printFlag=true",
             success(result) {
                 console.log("Successfully submited job!");
-                console.log(result)
-                //window.pollInterval = setInterval(function() { pollForPrintResult(result.jobId) }, 500);                
-                pollForPrintResult(result.jobId)
                 window.state.jobs[result.jobId] = window.state.selectedProperty;
+                pollForPrintResult(result.jobId)
+                
             },
             failure(error) {
                 alert("Could not submit job!");
@@ -148,7 +142,7 @@ function (
         })
     }
     
-    function webMapAsEncodedJSON() {
+    function webMapAsEncodedJSON() {        
         return encodeURI(JSON.stringify(
             {  
                 "mapOptions":{  
@@ -157,7 +151,7 @@ function (
                     "spatialReference":{  
                         "wkid":102100
                     },
-                    "scale": parseInt($("#scale").val())
+                    "scale": 500
                 },
                 "operationalLayers":[  
                     {  
@@ -221,17 +215,15 @@ function (
 
 
     // Keep track of the selected object
-    on(search,'select-result', function(e) {
-        console.log(e.result)
-        
-        // Case Adress
-        if(e.result.feature._layer.fastighet) {
-            window.state.selectedProperty = e.result.feature.attributes.fastighet;    
+    on(search,'select-result', function(e) {        
+        // Case Adress - use RealEstateName
+        if(e.result.feature.attributes.RealEstateName) {            
+            window.state.selectedProperty = e.result.feature.attributes.RealEstateName;    
             return
         }
 
-        // Case Fastighet
-        window.state.selectedProperty = e.result.feature.attributes.RealEstateName;    
+        // Case Fastighet use fastighet
+        window.state.selectedProperty = e.result.feature.attributes.fastighet;    
     });
 
     // Cant fetch elements in infoTemplate on the fly, resort
