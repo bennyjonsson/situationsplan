@@ -43,7 +43,7 @@ function (
         //spatialReference: new SpatialReference(3008),
         center: [12.7, 56.03], // lon, lat
         zoom: 12
-    });
+    });    
 
     // Used to store searches, active property, jobs and more while the user navigates
     window.state = {
@@ -217,7 +217,9 @@ function (
     });
 });
 
-
+// Replace poll method
+    // https://developers.arcgis.com/javascript/3/jsapi/printtask-amd.html
 // Splash popup?
-// Custom basemap (EPSG:3008)
-// How distinguish between job queued/processing and job failed? Both have code 400 ?
+    // Separate
+// Remove basemap
+    // https://developers.arcgis.com/javascript/3/jsapi/arcgisdynamicmapservicelayer-amd.html
