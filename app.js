@@ -10,6 +10,7 @@ require([
     "esri/tasks/PrintTask",
     "esri/tasks/PrintParameters",
     "esri/tasks/DataFile",
+    "esri/layers/ArcGISDynamicMapServiceLayer",
     // Custom modules
     "config.js"
 ], 
@@ -25,15 +26,22 @@ function (
     PrintTask,
     PrintParameters,
     DataFile,
+    ArcGISDynamicMapServiceLayer,
     // Custom modules
     Config
 ) {
     var map = new Map("map", {
-        basemap: "gray",
+        //basemap: "gray",
         //spatialReference: new SpatialReference(3008),
-        center: [12.7, 56.03], // lon, lat
+        center: [102236, 6214000], //12.7, 56.03], // lon, lat
         zoom: 12
     });    
+
+    map.addLayer(ArcGISDynamicMapServiceLayer(
+        Config.mapToPrint,{
+            useMapImage: true
+        }
+    ))
 
     // Used to store searches, active property, jobs and more while the user navigates
     window.state = {
@@ -119,14 +127,14 @@ function (
         });
     }
     
-    function webMapAsJSON() {        
+    function webMapAsJSON() {
         return JSON.stringify(
             {  
                 "mapOptions":{  
                     "showAttribution":false,
                     "extent": map.extent,
                     "spatialReference":{  
-                        "wkid":102100
+                        "wkid":3008
                     },
                     "scale": parseInt($("#scale").val())
                 },
@@ -141,10 +149,6 @@ function (
                     }
                 ],
                 "exportOptions":{  
-                    "outputSize":[  
-                        670,
-                        500
-                    ],
                     "dpi":240
                 },
                 "layoutOptions":{  
@@ -187,9 +191,13 @@ function (
     });
 });
 
-// Set file 
+// Scale error!
+    // Compare https//kartor.helsingborg.se/sitplan
+
+// Set file name
     // DataFile in Output_File no effect!
 // Splash popup?
     // https://dojotoolkit.org/reference-guide/1.10/dijit/Dialog.html
 // Remove basemap
-    // https://developers.arcgis.com/javascript/3/jsapi/arcgisdynamicmapservicelayer-amd.html
+    // How set center
+    // Add overview map at zoom out
