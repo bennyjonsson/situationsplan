@@ -45,3 +45,7 @@ body,
     transform: rotate(360deg);
   }
 }
+
+.spacing {
+    padding: 20px 20px 20px 20px;
+}

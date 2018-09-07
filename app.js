@@ -43,6 +43,8 @@ function (
         }
     ))
 
+
+
     // Used to store searches, active property, jobs and more while the user navigates
     window.state = {
         jobs: {}
@@ -54,7 +56,7 @@ function (
                 featureLayer: new FeatureLayer(Config.fastighetFeatureServer, {
                 outFields: ["*"],
                 infoTemplate: new InfoTemplate("${fastighet}", `
-                    <p>Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext </p>
+                    <p>	Välj skala och pappersstorlek </p>
                     <select id="scale">
                         <option value="500">500</option>
                         <option value="200">200</option>
@@ -63,7 +65,7 @@ function (
                         <option value="A4">A4</option>
                         <option value="A3">A3</option>
                     </select>
-                    <button id='download-pdf'>Ladda ner PDF</button>
+                    <button class="btn" id='download-pdf'>Ladda ner PDF</button>
                     <div id="print-result"></div>
                 `)}),
                 outFields: ["fastighet"],
@@ -77,7 +79,7 @@ function (
                 featureLayer: new FeatureLayer(Config.adressFeatureServer, {
                 outFields: ["*"],
                 infoTemplate: new InfoTemplate("${RealEstateName}", `
-                    <p>Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext Informationstext </p>
+                    <p>	Välj skala och pappersstorlek </p>
                     <select id="scale">
                         <option value="500">500</option>
                         <option value="200">200</option>
@@ -86,7 +88,7 @@ function (
                         <option value="A4">A4</option>
                         <option value="A3">A3</option>
                     </select>
-                    <button id='download-pdf'>Ladda ner PDF</button>
+                    <button class="btn" id='download-pdf'>Ladda ner PDF</button>
                     <div id="print-result"></div>
                 `)}),
                 outFields: ["Name", "RealEstateName"],
@@ -120,7 +122,7 @@ function (
         
         printTask.execute(params, function(result) {
             console.log("Success!", result)
-                $('#print-result').append("<a target='_blank' href='" + result.url + "'>" + selectedProperty + "</a></br>")
+                $('#print-result').append("<button class='btn btn-success'><a target='_blank' href='" + result.url + "'>" + selectedProperty + "</a></button></br>")
                 $('.lds-dual-ring').remove()            
         }, function(error) {
             console.log("Fail", error)
@@ -201,3 +203,5 @@ function (
 // Remove basemap
     // How set center
     // Add overview map at zoom out
+
+// EXTENT BUFFER 

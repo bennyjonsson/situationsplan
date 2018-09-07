@@ -12,11 +12,32 @@
     <link rel="stylesheet" href="app.css">
     <script src="https://js.arcgis.com/3.25/"></script>
     <script src="app.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
+
 </head>
 
 <body>
     <div id="search"></div>
     <div id="map"></div>
+
+    <!-- Modal HTML embedded directly into document -->
+    <div id="ex1" class="modal spacing">
+        <h3>Kartunderlag för situationsplan.</h3>
+        <p>Börja genom att söka efter en fastighet eller adress i sökfönstret.
+        <button class="btn btn-info">
+            <a href="#" rel="modal:close">Okej!</a>
+        </button>
+    </div>
+
+    <script>        
+        $("#ex1").modal({
+            showClose: false
+        });        
+    </script>
+
 
 </body>
 
