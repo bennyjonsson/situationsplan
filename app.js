@@ -99,11 +99,11 @@ function (
         params.extraParameters.Output_File = selectedProperty; //file;
         params.template = $("#template").val()
         
-        printTask.execute(params, function(result) {
-            console.log("Success!", result)
+        printTask.execute(params, function(result) {            
                 $('#print-result').append("<button class='btn btn-success'><a target='_blank' href='" + result.url + "'>" + selectedProperty + "</a></button></br>")
                 $('.lds-dual-ring').remove()            
         }, function(error) {
+            alert("Error, please review console.")
             console.log("Fail", error)
         });
     }
