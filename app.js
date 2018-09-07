@@ -70,7 +70,7 @@ function (
                 `)}),
                 outFields: ["fastighet"],
                 displayField: "fastighet",
-                suggestionTemplate: "FASTIGHET ${fastighet}",
+                suggestionTemplate: "${fastighet}",
                 name: "Fastighet",
                 placeholder: "Sök fastighet eller adress...",
                 enableSuggestions: true
@@ -93,7 +93,7 @@ function (
                 `)}),
                 outFields: ["Name", "RealEstateName"],
                 displayField: "Name",
-                suggestionTemplate: "FASTIGHET ${RealEstateName}: ADRESS ${Name}",
+                suggestionTemplate: "${RealEstateName}: ADRESS ${Name}",
                 name: "Adress",
                 placeholder: "Sök fastighet eller adress...",
                 enableSuggestions: true
@@ -101,6 +101,7 @@ function (
     ],
         allPlaceholder: "Sök fastighet eller adress ...",
         map: map,
+        enableSourcesMenu: false
     }, "search");
 
     search.startup();
@@ -186,8 +187,14 @@ function (
     });
 
     // Hide help on search focus
-    on(search,'focus', function(e) {        
-        document.elementFromPoint(1, 1).click();
+    on(search,'focus', function(e) {
+        setTimeout(function() {
+            try {
+                document.elementFromPoint(1, 1).click();                    
+            } catch(error) {
+                //ignore
+            }            
+        }, 100)                
     });    
 
     // Cant fetch elements in infoTemplate on the fly, resort
