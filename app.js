@@ -185,6 +185,11 @@ function (
         window.state.selectedProperty = e.result.feature.attributes.fastighet;    
     });
 
+    // Hide help on search focus
+    on(search,'focus', function(e) {        
+        document.elementFromPoint(1, 1).click();
+    });    
+
     // Cant fetch elements in infoTemplate on the fly, resort
     $("html").on('click', function(e) {
         if(e.target.id == "download-pdf") {
@@ -193,13 +198,8 @@ function (
     });
 });
 
-// Scale error!
-    // Compare https//kartor.helsingborg.se/sitplan
-
 // Set file name
     // DataFile in Output_File no effect!
-// Splash popup?
-    // https://dojotoolkit.org/reference-guide/1.10/dijit/Dialog.html
 // Remove basemap
     // How set center
     // Add overview map at zoom out
