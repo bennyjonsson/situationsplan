@@ -11,8 +11,9 @@ require([
     "esri/tasks/PrintParameters",
     "esri/tasks/DataFile",
     "esri/layers/ArcGISDynamicMapServiceLayer",
-    // Custom modules
-    "config.js"
+    // Custom modules    
+    "config.js",
+    "PrintDialog.js"
 ], 
 function (
     SpatialReference,
@@ -28,7 +29,8 @@ function (
     DataFile,
     ArcGISDynamicMapServiceLayer,
     // Custom modules
-    Config
+    Config,
+    PrintDialog
 ) {
     var map = new Map("map", {
         //basemap: "gray",
@@ -55,19 +57,7 @@ function (
             {
                 featureLayer: new FeatureLayer(Config.fastighetFeatureServer, {
                 outFields: ["*"],
-                infoTemplate: new InfoTemplate("${fastighet}", `
-                    <p>	Välj skala och pappersstorlek </p>
-                    <select id="scale">
-                        <option value="500">500</option>
-                        <option value="200">200</option>
-                    </select>
-                    <select id="template">
-                        <option value="A4">A4</option>
-                        <option value="A3">A3</option>
-                    </select>
-                    <button class="btn" id='download-pdf'>Ladda ner PDF</button>
-                    <div id="print-result"></div>
-                `)}),
+                infoTemplate: new InfoTemplate("${fastighet}", PrintDialog.html())}),
                 outFields: ["fastighet"],
                 displayField: "fastighet",
                 suggestionTemplate: "${fastighet}",
@@ -78,22 +68,10 @@ function (
             {
                 featureLayer: new FeatureLayer(Config.adressFeatureServer, {
                 outFields: ["*"],
-                infoTemplate: new InfoTemplate("${RealEstateName}", `
-                    <p>	Välj skala och pappersstorlek </p>
-                    <select id="scale">
-                        <option value="500">500</option>
-                        <option value="200">200</option>
-                    </select>
-                    <select id="template">
-                        <option value="A4">A4</option>
-                        <option value="A3">A3</option>
-                    </select>
-                    <button class="btn" id='download-pdf'>Ladda ner PDF</button>
-                    <div id="print-result"></div>
-                `)}),
+                infoTemplate: new InfoTemplate("${RealEstateName}", PrintDialog.html())}),
                 outFields: ["Name", "RealEstateName"],
                 displayField: "Name",
-                suggestionTemplate: "${RealEstateName}: ADRESS ${Name}",
+                suggestionTemplate: "${RealEstateName} / ${Name}",
                 name: "Adress",
                 placeholder: "Sök fastighet eller adress...",
                 enableSuggestions: true
