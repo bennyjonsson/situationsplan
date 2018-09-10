@@ -11,6 +11,12 @@ require([
     "esri/tasks/PrintParameters",
     "esri/tasks/DataFile",
     "esri/layers/ArcGISDynamicMapServiceLayer",
+    "esri/geometry/Polygon",
+    "esri/symbols/SimpleFillSymbol",
+    "esri/symbols/SimpleLineSymbol",
+    "esri/Color",
+    "esri/graphic",
+    "esri/tasks/PrintTemplate",
     // Custom modules    
     "config.js",
     "PrintDialog.js"
@@ -28,22 +34,35 @@ function (
     PrintParameters,
     DataFile,
     ArcGISDynamicMapServiceLayer,
+    Polygon,
+    SimpleFillSymbol,
+    SimpleLineSymbol,
+    Color,
+    Graphic,
+    PrintTemplate,
     // Custom modules
     Config,
     PrintDialog
 ) {
+    var map = new Map("map");
+    /*
     var map = new Map("map", {
         //basemap: "gray",
         //spatialReference: new SpatialReference(3008),
-        center: [102236, 6214000], //12.7, 56.03], // lon, lat
-        zoom: 12
+        //center: [102236, 6214000] //12.7, 56.03], // lon, lat
+        //zoom: 12
     });    
-
+    */
     map.addLayer(ArcGISDynamicMapServiceLayer(
         Config.mapToPrint,{
             useMapImage: true
         }
     ))
+
+    on(map, 'layers-add-result', function() {
+        map.zoom(12);
+        map.centerAt(new Point([102236, 6214000],new SpatialReference({ wkid:3008 })));
+    });
 
 
 
@@ -90,14 +109,17 @@ function (
 
         $('#print-result').append('<div id="loader" class="lds-dual-ring"></div>')
 
+        var template = new PrintTemplate();
+        template.exportOptions = {};
+        template.format = "PDF";
+        template.layout = $("#template").val()  ;
+        template.preserveScale = false;
+
         var params = new PrintParameters();
         params.map = map;
         params.extraParameters = {}
-        params.extraParameters.Web_Map_as_JSON = webMapAsJSON()
-        var file = new DataFile()
-        file.url = selectedProperty;
-        params.extraParameters.Output_File = selectedProperty; //file;
-        params.template = $("#template").val()
+        params.extraParameters.Web_Map_as_JSON = webMapAsJSON()        
+        params.template = template                
         
         printTask.execute(params, function(result) {            
                 $('#print-result').append("<button class='btn btn-success'><a target='_blank' href='" + result.url + "'>" + selectedProperty + "</a></button></br>")
@@ -147,7 +169,8 @@ function (
             
                         ]
                     }
-                }
+                },
+                "layout": $("#template").val()
             }
         )
     }
@@ -181,12 +204,36 @@ function (
             submitPrintJob();
         }
     });
+
+    // Called on map move, or template format/scale selection
+    window.updatePrintExtent = function() {
+        console.log("Updated extent");
+        var poly = new Polygon({
+            "rings": [[101236, 6214000], [101536, 6214500], [104236, 6215000], [101236, 6214000]],
+            "spatialReference":{"wkid":3008 }
+
+        });
+        var fs = new SimpleFillSymbol(
+            SimpleFillSymbol.STYLE_SOLID,
+            new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+            new Color([255,0,0]), 2),
+            new Color([255,255,0,0.6])
+        ); 
+        
+        //map.graphics.add(new Graphic(poly, fs));        
+    }
+
 });
 
-// Set file name
-    // DataFile in Output_File no effect!
+
+
+
+
 // Remove basemap
     // How set center
-    // Add overview map at zoom out
+    // Add overview map at zoom out (Set in MXD!)
 
 // EXTENT BUFFER 
+    // 
+
+// PrintTask template parameter bug
