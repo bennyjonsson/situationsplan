@@ -7,7 +7,16 @@ define(function(){
         printingService: "https://gisdata.helsingborg.se/arcgis/rest/services/Utskriftstjanster/PrintSituationsplan",
         printingServiceOperationalLayers: "https://platsen.helsingborg.se/arcgis/rest/services/Bygglov/situationsplan/MapServer",
 
-
+        paperSpace: {
+            A4: {
+                width: 0.190007,
+                height: 0.202946
+            },
+            A3: {
+                width: 0.2687578,
+                height: 0.3044507
+            }
+        },
 
         successMessage: "Din beställning är nu färdig. Tänk på att skriva ut i verklig storlek, för att få den i rätt skala."
     };

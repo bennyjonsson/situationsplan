@@ -39,7 +39,5 @@ Om mallarna behöver ändras måste PrintingServicen publiceras om. Följ dessa 
 * https://developers.arcgis.com/javascript/3/jsapi/printtask-amd.html
 
 ## TODO
-* Ta bort testtjänster
-* Visa mer exakt streckad förhandsyta
-* Flytta kartutbredningskonstanterna till config.js 
 * Lägg till cachad bakgrundskarta (funkar inte att zooma ut till 5000+ nu)
+* BUGG: Välj skala 200. Stäng ner fönstret. Klicka på fastigheten. Skalan sätts nu till 500 som är default, men förhandsytan uppdateras inte (för extenten är oförändrad)

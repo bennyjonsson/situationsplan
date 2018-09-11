@@ -231,24 +231,39 @@ function (
     }
 
     function printBounds() {
+        var scale = parseInt($("#scale").val())
+        var format = $("#template").val()        
+        
+        var xmin = map.extent.getCenter().x-scale*Config.paperSpace[format].width/2
+        var ymin = map.extent.getCenter().y-scale*Config.paperSpace[format].height/2
+        var xmax = map.extent.getCenter().x+scale*Config.paperSpace[format].width/2
+        var ymax = map.extent.getCenter().y+scale*Config.paperSpace[format].height/2
+        console.log([
+            [xmin, ymin],
+            [xmax, ymin],
+            [xmax, ymax],
+            [xmin, ymax],
+            [xmin, ymin]            
+        ]);
         return [
-            [map.extent.getCenter().x-printSideLength()/2, map.extent.getCenter().y-printSideLength()/2],
-            [map.extent.getCenter().x+printSideLength()/2, map.extent.getCenter().y-printSideLength()/2],
-            [map.extent.getCenter().x+printSideLength()/2, map.extent.getCenter().y+printSideLength()/2],
-            [map.extent.getCenter().x-printSideLength()/2, map.extent.getCenter().y+printSideLength()/2],
-            [map.extent.getCenter().x-printSideLength()/2, map.extent.getCenter().y-printSideLength()/2]
+            [xmin, ymin],
+            [xmax, ymin],
+            [xmax, ymax],
+            [xmin, ymax],
+            [xmin, ymin]            
         ]
     }
-
-    // ASSUMES SQUARE TEMPLATES! CURRENTLY USES THE SHORTEST SIDE.
-    function printSideLength() {
-        var scale = parseInt($("#scale").val())
-        var format = $("#template").val()
-        var paperSpace = {
-            A4: 0.19,
-            A3: 0.26
-        }
-
-        return scale*paperSpace[format]
-    }
 });
+
+
+/*
+
+new Extent(
+    xmin,
+    ymin,
+    xmax,
+    yman,
+    new SpatialReference({ wkid:4326 })
+);
+
+*/
