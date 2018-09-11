@@ -45,14 +45,7 @@ function (
     PrintDialog
 ) {
     var map = new Map("map");
-    /*
-    var map = new Map("map", {
-        //basemap: "gray",
-        //spatialReference: new SpatialReference(3008),
-        //center: [102236, 6214000] //12.7, 56.03], // lon, lat
-        //zoom: 12
-    });    
-    */
+
     map.addLayer(ArcGISDynamicMapServiceLayer(
         Config.mapToPrint,{
             useMapImage: true
@@ -64,7 +57,8 @@ function (
         map.centerAt(new Point([102236, 6214000],new SpatialReference({ wkid:3008 })));
     });
 
-
+    var printBoundsLayer = new esri.layers.GraphicsLayer();
+    map.addLayer(printBoundsLayer)    
 
     // Used to store searches, active property, jobs and more while the user navigates
     window.state = {
@@ -103,7 +97,7 @@ function (
 
     search.startup();
 
-    function submitPrintJob() {
+    window.submitPrintJob = function() {
         var selectedProperty = window.state.selectedProperty;
         var printTask = new PrintTask(Config.printingService  + "/GPServer/Export%20Web%20Map");
 
@@ -122,7 +116,7 @@ function (
         params.template = template                
         
         printTask.execute(params, function(result) {            
-                $('#print-result').append("<button class='btn btn-success'><a target='_blank' href='" + result.url + "'>" + selectedProperty + "</a></button></br>")
+                $('#print-result').append("<a target='_blank' href='" + result.url + "'><button class='btn btn-success'>" + selectedProperty + "</button></a></br>")
                 $('.lds-dual-ring').remove()            
         }, function(error) {
             alert("Error, please review console.")
@@ -184,11 +178,19 @@ function (
         }
 
         // Case Fastighet use fastighet
-        window.state.selectedProperty = e.result.feature.attributes.fastighet;    
+        window.state.selectedProperty = e.result.feature.attributes.fastighet;
+        
+        on(map, 'extent-change', function() {
+            window.updatePrintExtent()
+        })
     });
 
     // Hide help on search focus
     on(search,'focus', function(e) {
+        window.closeModal()
+    });
+    
+    window.closeModal = function() {
         setTimeout(function() {
             try {
                 document.elementFromPoint(1, 1).click();                    
@@ -196,44 +198,68 @@ function (
                 //ignore
             }            
         }, 100)                
-    });    
+    }
 
+    /*
     // Cant fetch elements in infoTemplate on the fly, resort
     $("html").on('click', function(e) {
         if(e.target.id == "download-pdf") {
-            submitPrintJob();
+            window.submitPrintJob();
         }
     });
+    */
 
     // Called on map move, or template format/scale selection
     window.updatePrintExtent = function() {
-        console.log("Updated extent");
+        printBoundsLayer.clear()        
+
         var poly = new Polygon({
-            "rings": [[101236, 6214000], [101536, 6214500], [104236, 6215000], [101236, 6214000]],
+            //"rings": [[[98236, 6217000], [101536, 6214500], [98236, 6211000], [98236, 6217000]]],
+            "rings": [ printBounds() ],
             "spatialReference":{"wkid":3008 }
 
         });
         var fs = new SimpleFillSymbol(
-            SimpleFillSymbol.STYLE_SOLID,
-            new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-            new Color([255,0,0]), 2),
-            new Color([255,255,0,0.6])
-        ); 
-        
-        //map.graphics.add(new Graphic(poly, fs));        
+                SimpleFillSymbol.STYLE_SOLID,
+                new SimpleLineSymbol(
+                    SimpleLineSymbol.STYLE_DASH,
+                    new Color([255,0,0]),
+                    2
+                ),
+                new Color([255,255,0,0.01])
+        );
+
+        printBoundsLayer.add(new Graphic(poly, fs));        
+    }
+
+    function printBounds() {
+        return [
+            [map.extent.getCenter().x-printSideLength()/2, map.extent.getCenter().y-printSideLength()/2],
+            [map.extent.getCenter().x+printSideLength()/2, map.extent.getCenter().y-printSideLength()/2],
+            [map.extent.getCenter().x+printSideLength()/2, map.extent.getCenter().y+printSideLength()/2],
+            [map.extent.getCenter().x-printSideLength()/2, map.extent.getCenter().y+printSideLength()/2],
+            [map.extent.getCenter().x-printSideLength()/2, map.extent.getCenter().y-printSideLength()/2]
+        ]
+    }
+
+    // ASSUMES SQUARE TEMPLATES! CURRENTLY USES THE SHORTEST SIDE.
+    function printSideLength() {
+        var scale = parseInt($("#scale").val())
+        var format = $("#template").val()
+        var paperSpace = {
+            A4: 0.19,
+            A3: 0.26
+        }
+
+        return scale*paperSpace[format]
     }
 
 });
 
-
-
-
-
 // Remove basemap
-    // How set center
     // Add overview map at zoom out (Set in MXD!)
 
 // EXTENT BUFFER 
-    // 
+    // Improve by exact corresponding rectangular measurments
 
-// PrintTask template parameter bug
+// STYLE INFO BOX AND RESULT PRENTATION
