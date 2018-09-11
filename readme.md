@@ -39,7 +39,7 @@ Om mallarna behöver ändras måste PrintingServicen publiceras om. Följ dessa 
 * https://developers.arcgis.com/javascript/3/jsapi/printtask-amd.html
 
 ## TODO
-* Lägg till fler skalor
 * Ta bort testtjänster
 * Visa mer exakt streckad förhandsyta
 * Flytta kartutbredningskonstanterna till config.js 
+* Lägg till cachad bakgrundskarta (funkar inte att zooma ut till 5000+ nu)

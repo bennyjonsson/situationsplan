@@ -252,25 +252,3 @@ function (
         return scale*paperSpace[format]
     }
 });
-
-// Remove basemap
-    // Add overview map at zoom out (Set in MXD!)
-
-// EXTENT BUFFER 
-    // Improve by exact corresponding rectangular measurments
-
-// STYLE INFO BOX AND RESULT PRESENTATION
-
-
-
-/*
-
-showForm()
-
-showLoadingScreen()
-
-showResult()
-
-showError()
-
-*/

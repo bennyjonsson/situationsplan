@@ -16,13 +16,16 @@ define(["config.js"], function(Config) {
                     <div class="form-group"> \
                         <label for="scale">Skala</label> \
                         <select class="form-control" id="scale" onchange="window.updatePrintExtent()"> \
-                            <option value="500">500</option> \
                             <option value="200">200</option> \
+                            <option value="500" selected>500</option> \
+                            <option value="1000">1000</option> \
+                            <option value="2000">2000</option> \
+                            <option value="5000">5000</option> \
                         </select> \
                         <label for="template">Format</label> \
                         <select class="form-control" id="template" onchange="window.updatePrintExtent()"> \
-                            <option value="A4">A4</option> \
                             <option value="A3">A3</option> \
+                            <option value="A4" selected>A4</option> \
                         </select> \
                         <div id="print-form-submit">\
                             <button class="btn btn-success" id="download-pdf" onclick="window.submitPrintJob()">Ladda ner PDF</button> \
