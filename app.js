@@ -47,7 +47,7 @@ function (
     var map = new Map("map");
 
     map.addLayer(ArcGISDynamicMapServiceLayer(
-        Config.mapToPrint,{
+        Config.baseMap,{
             useMapImage: true
         }
     ))
