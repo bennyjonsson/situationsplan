@@ -7,6 +7,7 @@ define(function(){
         printingService: "https://gisdata.helsingborg.se/arcgis/rest/services/Utskriftstjanster/PrintSituationsplan",
         printingServiceOperationalLayers: "https://platsen.helsingborg.se/arcgis/rest/services/Bygglov/situationsplan/MapServer",
 
+        // Layout dataframe width/height
         paperSpace: {
             A4: {
                 width: 0.190007,

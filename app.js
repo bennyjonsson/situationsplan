@@ -238,13 +238,7 @@ function (
         var ymin = map.extent.getCenter().y-scale*Config.paperSpace[format].height/2
         var xmax = map.extent.getCenter().x+scale*Config.paperSpace[format].width/2
         var ymax = map.extent.getCenter().y+scale*Config.paperSpace[format].height/2
-        console.log([
-            [xmin, ymin],
-            [xmax, ymin],
-            [xmax, ymax],
-            [xmin, ymax],
-            [xmin, ymin]            
-        ]);
+
         return [
             [xmin, ymin],
             [xmax, ymin],
@@ -254,16 +248,3 @@ function (
         ]
     }
 });
-
-
-/*
-
-new Extent(
-    xmin,
-    ymin,
-    xmax,
-    yman,
-    new SpatialReference({ wkid:4326 })
-);
-
-*/
