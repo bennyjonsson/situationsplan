@@ -1,22 +1,48 @@
-define(function(){
+define(["config.js"], function(Config) {
+
+    window.resetForm = function() {
+            $('#print-form').show();
+            $('#print-loading').hide();
+            $('#print-error').hide();        
+            $('#print-result').empty();
+            $('#print-result').hide();
+    }
+
     return {
         html: function() {
-            // IE11 does not support multiline strings, use lines ending with \
+            // IE11 does not support multiline strings, use lines ending with \ instead
             return '\
-                <div class="form-group"> \
-                    <label for="scale">Skala</label> \
-                    <select class="form-control" id="scale" onchange="window.updatePrintExtent()"> \
-                        <option value="500">500</option> \
-                        <option value="200">200</option> \
-                    </select> \
-                    <label for="template">Format</label> \
-                    <select class="form-control" id="template" onchange="window.updatePrintExtent()"> \
-                        <option value="A4">A4</option> \
-                        <option value="A3">A3</option> \
-                    </select> \
+                <div id="print-form">\
+                    <div class="form-group"> \
+                        <label for="scale">Skala</label> \
+                        <select class="form-control" id="scale" onchange="window.updatePrintExtent()"> \
+                            <option value="500">500</option> \
+                            <option value="200">200</option> \
+                        </select> \
+                        <label for="template">Format</label> \
+                        <select class="form-control" id="template" onchange="window.updatePrintExtent()"> \
+                            <option value="A4">A4</option> \
+                            <option value="A3">A3</option> \
+                        </select> \
+                        <div id="print-form-submit">\
+                            <button class="btn btn-success" id="download-pdf" onclick="window.submitPrintJob()">Ladda ner PDF</button> \
+                        </div>\
+                    </div> \
+                </div>\
+                <div id="print-loading" hidden>\
+                    <div id="loader" class="lds-dual-ring"></div>\
                 </div> \
-                <button class="btn" id="download-pdf" onclick="window.submitPrintJob()">Ladda ner PDF</button> \
-                <div id="print-result"></div>'
+                <div id="print-error" hidden>\
+                    <p> Någonting gick fel! Försök igen, eller kontakta sbf.itgis@helsingborg.se </p>\
+                </div> \
+                <div id="print-result" hidden></div>'
+        },
+
+        showResult: function(result) {            
+            $('#print-result').append("<p>" + Config.successMessage + "</p>")
+            $('#print-result').append("<a target='_blank' href='" + result.url + "'><button class='btn btn-success'>Öppna PDF!</button></a>")
+            $('#print-result').append("<button class='btn' onclick='window.resetForm()'>Börja om</button>")
+            
         }
     };
 });

@@ -15,7 +15,16 @@ body,
   left: 74px;
 }
 
+#print-form-submit {
+    text-align: center;
+}
+
 #print-result {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#print-loading {
     margin-top: 20px;
     text-align: center;
 }
@@ -48,4 +57,15 @@ body,
 
 .spacing {
     padding: 20px 20px 20px 20px;
+}
+
+.btn {
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+.zoomTo { display:none; }
+
+#splash-modal {
+    text-align: center;
 }

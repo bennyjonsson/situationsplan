@@ -101,7 +101,11 @@ function (
         var selectedProperty = window.state.selectedProperty;
         var printTask = new PrintTask(Config.printingService  + "/GPServer/Export%20Web%20Map");
 
-        $('#print-result').append('<div id="loader" class="lds-dual-ring"></div>')
+        //$('#print-result').append('<div id="loader" class="lds-dual-ring"></div>')
+        $('#print-form').hide();
+        $('#print-result').hide();
+        $('#print-loading').show();
+
 
         var template = new PrintTemplate();
         template.exportOptions = {};
@@ -115,11 +119,15 @@ function (
         params.extraParameters.Web_Map_as_JSON = webMapAsJSON()        
         params.template = template                
         
-        printTask.execute(params, function(result) {            
-                $('#print-result').append("<a target='_blank' href='" + result.url + "'><button class='btn btn-success'>" + selectedProperty + "</button></a></br>")
-                $('.lds-dual-ring').remove()            
+        printTask.execute(params, function(result) {
+            $('#print-loading').hide();                        
+            $('#print-result').show();
+
+            PrintDialog.showResult(result)            
+                            
         }, function(error) {
-            alert("Error, please review console.")
+            $('#print-loading').hide();
+            $('#print-error').show();
             console.log("Fail", error)
         });
     }
@@ -170,7 +178,12 @@ function (
     }
 
     // Keep track of the selected object
-    on(search,'select-result', function(e) {        
+    on(search,'select-result', function(e) {
+        // Listen for when to change printBounds
+        on(map, 'extent-change', function() {
+            window.updatePrintExtent()
+        })        
+        
         // Case Adress - use RealEstateName
         if(e.result.feature.attributes.RealEstateName) {            
             window.state.selectedProperty = e.result.feature.attributes.RealEstateName;    
@@ -179,10 +192,6 @@ function (
 
         // Case Fastighet use fastighet
         window.state.selectedProperty = e.result.feature.attributes.fastighet;
-        
-        on(map, 'extent-change', function() {
-            window.updatePrintExtent()
-        })
     });
 
     // Hide help on search focus
@@ -200,21 +209,10 @@ function (
         }, 100)                
     }
 
-    /*
-    // Cant fetch elements in infoTemplate on the fly, resort
-    $("html").on('click', function(e) {
-        if(e.target.id == "download-pdf") {
-            window.submitPrintJob();
-        }
-    });
-    */
-
-    // Called on map move, or template format/scale selection
     window.updatePrintExtent = function() {
         printBoundsLayer.clear()        
 
         var poly = new Polygon({
-            //"rings": [[[98236, 6217000], [101536, 6214500], [98236, 6211000], [98236, 6217000]]],
             "rings": [ printBounds() ],
             "spatialReference":{"wkid":3008 }
 
@@ -253,7 +251,6 @@ function (
 
         return scale*paperSpace[format]
     }
-
 });
 
 // Remove basemap
@@ -262,4 +259,18 @@ function (
 // EXTENT BUFFER 
     // Improve by exact corresponding rectangular measurments
 
-// STYLE INFO BOX AND RESULT PRENTATION
+// STYLE INFO BOX AND RESULT PRESENTATION
+
+
+
+/*
+
+showForm()
+
+showLoadingScreen()
+
+showResult()
+
+showError()
+
+*/
