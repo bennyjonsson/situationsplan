@@ -41,3 +41,4 @@ Om mallarna behöver ändras måste PrintingServicen publiceras om. Följ dessa 
 ## TODO
 * Publicera om platsen/Bygglov/situationsplan - Lägg till cachad bakgrundskarta?
 * BUGG: Välj skala 200. Stäng ner fönstret. Klicka på fastigheten. Skalan sätts nu till 500 som är default, men förhandsytan uppdateras inte (för extenten är oförändrad)
+* Publicera bakgrundstjänster på EXTERNA servrar.
