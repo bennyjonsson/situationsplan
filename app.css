@@ -69,3 +69,7 @@ body,
 #splash-modal {
     text-align: center;
 }
+
+.searchBtn {
+    background: #5cb85c !important;
+}
