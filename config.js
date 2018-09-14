@@ -17,6 +17,6 @@ define(function(){
                 height: 0.3044507
             }
         },        
-        successMessage: "Din beställning är nu färdig. Tänk på att skriva ut i verklig storlek, för att få den i rätt skala."
+        successMessage: "Din beställning är nu färdig. Visa eller ändra den med knapparna nedan, alternativt gör en ny sökning i sökrutan högst upp till vänster."
     };
 });
