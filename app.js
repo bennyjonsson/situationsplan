@@ -184,8 +184,8 @@ function (
     }
 
     // Keep track of the selected object
-    on(search,'select-result', function(e) {
-        
+    on(search,'select-result', function(e) {                
+        map.setScale(500)
         map.centerAt(
             new Point(
                 (e.result.extent.xmin+e.result.extent.xmax)/2,
@@ -193,7 +193,7 @@ function (
                 new SpatialReference({ wkid:3008 })
             )
         )        
-        map.setScale(500)
+        
 
         //// Listen for when to change printBounds
         //on(map, 'extent-change', function() {            
