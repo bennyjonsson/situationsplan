@@ -29,6 +29,7 @@ define(["config.js"], function(Config) {
                         </select> \
                         <div id="print-form-submit">\
                             <button class="btn btn-success" id="download-pdf" onclick="window.submitPrintJob()">Ladda ner PDF</button> \
+                            <button class="btn" onclick="location.href=`/situationsplan`;">Börja om</button> \
                         </div>\
                     </div> \
                 </div>\
@@ -45,6 +46,9 @@ define(["config.js"], function(Config) {
             $('#print-result').append("<p>" + Config.successMessage + "</p>")
             $('#print-result').append("<a target='_blank' href='" + result.url + "'><button class='btn btn-success'>Öppna PDF!</button></a>")
             $('#print-result').append("<button class='btn' onclick='window.resetForm()'>Ändra</button>")
+            $('#print-result').append("<button class='btn' onclick='location.href=`/situationsplan`;'>Börja om</button>")
+
+            
             
         }
     };
