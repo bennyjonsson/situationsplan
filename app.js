@@ -17,6 +17,7 @@ require([
     "esri/Color",
     "esri/graphic",
     "esri/tasks/PrintTemplate",
+    "esri/geometry/Point",
     // Custom modules    
     "config.js",
     "PrintDialog.js"
@@ -40,6 +41,7 @@ function (
     Color,
     Graphic,
     PrintTemplate,
+    Point,
     // Custom modules
     Config,
     PrintDialog
@@ -76,7 +78,8 @@ function (
                 suggestionTemplate: "${fastighet}",
                 name: "Fastighet",
                 placeholder: "Sök fastighet eller adress...",
-                enableSuggestions: true
+                enableSuggestions: true,
+                autoNavigate: false
             },            
             {
                 featureLayer: new FeatureLayer(Config.adressFeatureServer, {
@@ -87,7 +90,8 @@ function (
                 suggestionTemplate: "${RealEstateName} / ${Name}",
                 name: "Adress",
                 placeholder: "Sök fastighet eller adress...",
-                enableSuggestions: true
+                enableSuggestions: true,
+                autoNavigate: false
             }
     ],
         allPlaceholder: "Sök fastighet eller adress ...",
@@ -179,8 +183,18 @@ function (
 
     // Keep track of the selected object
     on(search,'select-result', function(e) {
+        
+        map.centerAt(
+            new Point(
+                (e.result.extent.xmin+e.result.extent.xmax)/2,
+                (e.result.extent.ymin+e.result.extent.ymax)/2,
+                new SpatialReference({ wkid:3008 })
+            )
+        )        
+        map.setScale(500)
+
         // Listen for when to change printBounds
-        on(map, 'extent-change', function() {
+        on(map, 'extent-change', function() {            
             window.updatePrintExtent()
         })        
         

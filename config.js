@@ -16,8 +16,7 @@ define(function(){
                 width: 0.2687578,
                 height: 0.3044507
             }
-        },
-
+        },        
         successMessage: "Din beställning är nu färdig. Tänk på att skriva ut i verklig storlek, för att få den i rätt skala."
     };
 });
