@@ -67,12 +67,14 @@ function (
         jobs: {}
     }
 
+    window.printDialogHtml = PrintDialog.html()
+
     var search = new Search({
         sources: [
             {
                 featureLayer: new FeatureLayer(Config.fastighetFeatureServer, {
                 outFields: ["*"],
-                infoTemplate: new InfoTemplate("${fastighet}", PrintDialog.html())}),
+                infoTemplate: new InfoTemplate("${fastighet}", window.printDialogHtml)}),
                 outFields: ["fastighet"],
                 displayField: "fastighet",
                 suggestionTemplate: "${fastighet}",
@@ -84,7 +86,7 @@ function (
             {
                 featureLayer: new FeatureLayer(Config.adressFeatureServer, {
                 outFields: ["*"],
-                infoTemplate: new InfoTemplate("${RealEstateName}", PrintDialog.html())}),
+                infoTemplate: new InfoTemplate("${RealEstateName}", window.printDialogHtml)}),
                 outFields: ["Name", "RealEstateName"],
                 displayField: "Name",
                 suggestionTemplate: "${RealEstateName} / ${Name}",
@@ -193,10 +195,14 @@ function (
         )        
         map.setScale(500)
 
-        // Listen for when to change printBounds
-        on(map, 'extent-change', function() {            
+        //// Listen for when to change printBounds
+        //on(map, 'extent-change', function() {            
+        //    window.updatePrintExtent()
+        //})
+        
+        setInterval(function() {
             window.updatePrintExtent()
-        })        
+        }, 500);
         
         // Case Adress - use RealEstateName
         if(e.result.feature.attributes.RealEstateName) {            
