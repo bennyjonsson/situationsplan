@@ -43,7 +43,7 @@ define(["config.js"], function(Config) {
         },
 
         showResult: function(result) {            
-            $('#print-result').append("<p>" + Config.successMessage + "</p>")
+            $('#print-result').append("<p>Din beställning är nu färdig. Visa eller ändra den med knapparna nedan, alternativt gör en ny sökning i sökrutan högst upp till vänster.</p>")
             $('#print-result').append("<a target='_blank' href='" + result.url + "'><button class='btn btn-success'>Öppna PDF!</button></a>")
             $('#print-result').append("<button class='btn' onclick='window.resetForm()'>Ändra</button>")
             $('#print-result').append("<button class='btn' onclick='location.href=`/situationsplan`;'>Börja om</button>")

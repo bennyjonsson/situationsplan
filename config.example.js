@@ -16,7 +16,6 @@ define(function(){
                 width: 0.2687578,
                 height: 0.3044507
             }
-        },        
-        successMessage: "Din beställning är nu färdig. Visa eller ändra den med knapparna nedan, alternativt gör en ny sökning i sökrutan högst upp till vänster."
+        }
     };
 });
