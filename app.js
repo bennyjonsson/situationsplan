@@ -220,13 +220,7 @@ function (
     });
     
     window.closeModal = function() {
-        setTimeout(function() {
-            try {
-                document.elementFromPoint(1, 1).click();                    
-            } catch(error) {
-                //ignore
-            }            
-        }, 100)                
+        $.modal.close()              
     }
 
     window.updatePrintExtent = function() {
