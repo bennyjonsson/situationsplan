@@ -39,6 +39,5 @@ Om mallarna behöver ändras måste PrintingServicen publiceras om. Följ dessa 
 * https://developers.arcgis.com/javascript/3/jsapi/printtask-amd.html
 
 ## TODO
-* Publicera om platsen/Bygglov/situationsplan - Lägg till cachad bakgrundskarta?
-* BUGG: Välj skala 200. Stäng ner fönstret. Klicka på fastigheten. Skalan sätts nu till 500 som är default, men förhandsytan uppdateras inte (för extenten är oförändrad)
-* Publicera bakgrundstjänster på EXTERNA servrar.
+* BUGG: Välj skala 200. Stäng ner fönstret. Klicka på fastigheten. Skalan sätts nu till 500 som är default. För att åtmindstånde visa rätt preview ligger en setInterval som kontrollerar aktuell skala/format var 500:e millisekund.
+* BUGG: Sök på Karl X Gustavs gata 62. Välj föreslagna alternativet. Tryck omedelbart på Sökknappen igen. Då förflyttas du till Regissören 3 (OBJECTID=0 för adresssök). Se mer kommentarer i koden.

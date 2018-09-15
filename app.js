@@ -67,31 +67,29 @@ function (
         jobs: {}
     }
 
-    window.printDialogHtml = PrintDialog.html()
-
     var search = new Search({
         sources: [
             {
-                featureLayer: new FeatureLayer(Config.fastighetFeatureServer, {
-                outFields: ["*"],
-                infoTemplate: new InfoTemplate("${fastighet}", window.printDialogHtml)}),
+                featureLayer: new FeatureLayer(Config.fastighetFeatureServer, {                
+                infoTemplate: new InfoTemplate("${fastighet}", PrintDialog.html())}),
                 outFields: ["fastighet"],
                 displayField: "fastighet",
                 suggestionTemplate: "${fastighet}",
                 name: "Fastighet",
                 placeholder: "Sök fastighet eller adress...",
+                minCharacters: 2,
                 enableSuggestions: true,
                 autoNavigate: false
             },            
             {
-                featureLayer: new FeatureLayer(Config.adressFeatureServer, {
-                outFields: ["*"],
-                infoTemplate: new InfoTemplate("${RealEstateName}", window.printDialogHtml)}),
+                featureLayer: new FeatureLayer(Config.adressFeatureServer, {                
+                infoTemplate: new InfoTemplate("${RealEstateName}", PrintDialog.html())}),
                 outFields: ["Name", "RealEstateName"],
                 displayField: "Name",
-                suggestionTemplate: "${RealEstateName} / ${Name}",
+                suggestionTemplate: "${RealEstateName} - ${Name}",
                 name: "Adress",
                 placeholder: "Sök fastighet eller adress...",
+                minCharacters: 2,
                 enableSuggestions: true,
                 autoNavigate: false
             }
@@ -183,8 +181,16 @@ function (
         )
     }
 
-    // Keep track of the selected object
-    on(search,'select-result', function(e) {                
+    // As soon as user selects adress/fastighet
+    on(search,'select-result', function(e) {
+        // After a result is selected, subsequent imidiate searches ignores the searchstring and fetches OBJECTID=0. 3.25 bug? Tried the following:
+        $("#search_input").val(''); // no effect but prompts the user to write something new       
+        //search.set('value',''); // closes current selection
+        //search.hide(); // no effect
+        //search.show(); // no effect
+
+        
+        // Override normal
         map.setScale(500)
         map.centerAt(
             new Point(
@@ -193,12 +199,6 @@ function (
                 new SpatialReference({ wkid:3008 })
             )
         )        
-        
-
-        //// Listen for when to change printBounds
-        //on(map, 'extent-change', function() {            
-        //    window.updatePrintExtent()
-        //})
         
         setInterval(function() {
             window.updatePrintExtent()
