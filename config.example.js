@@ -1,10 +1,10 @@
 define(function(){
     return {
-        baseMap: "https://geodata.helsingborg.se/arcgis/rest/services/Bygglov/situationsplan/MapServer",        
-        adressFeatureServer: "https://gisdata2.helsingborg.se/arcgis/rest/services/Fastigheter/Adress_till_fastighet/FeatureServer/0",
-        fastighetFeatureServer: "https://gisdata2.helsingborg.se/arcgis/rest/services/Fastigheter/Alla_fastigheter/FeatureServer/0",
-        printingService: "https://gisdata.helsingborg.se/arcgis/rest/services/Utskriftstjanster/PrintSituationsplan",
-        mapToPrint: "https://geodata.helsingborg.se/arcgis/rest/services/Bygglov/situationsplan/MapServer",
+        baseMap: "https://.../arcgis/rest/services/Bygglov/situationsplan/MapServer",        
+        adressFeatureServer: "https://.../arcgis/rest/services/Fastigheter/Adress_till_fastighet/FeatureServer/0",
+        fastighetFeatureServer: "https://.../arcgis/rest/services/Fastigheter/Alla_fastigheter/FeatureServer/0",
+        printingService: "https://.../arcgis/rest/services/Utskriftstjanster/PrintSituationsplan",
+        mapToPrint: "https://.../arcgis/rest/services/Bygglov/situationsplan/MapServer",
 
         // Layout dataframe width/height
         paperSpace: {

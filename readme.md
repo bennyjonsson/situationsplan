@@ -7,7 +7,7 @@ Kartunderlag för situationsplan - en enkel tomtkarta för ArcGIS/Geosecma. Bygg
 
 ## Installation
 * Klona eller ladda ner det här repot.
-* Editera config.js efter din miljö
+* Kopiera config.example.js till config.js och ändra den efter din miljö
 
 ## Tjänster som behövs
 * En FeatureServertjänst för adressök
