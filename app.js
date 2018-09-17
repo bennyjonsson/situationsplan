@@ -184,7 +184,7 @@ function (
     // As soon as user selects adress/fastighet
     on(search,'select-result', function(e) {
         // After a result is selected, subsequent imidiate searches ignores the searchstring and fetches OBJECTID=0. 3.25 bug? Tried the following:
-        $("#search_input").val(''); // no effect but prompts the user to write something new       
+        //$("#search_input").val(''); // no effect but prompts the user to write something new        UPDATE: BREAKS IE11
         //search.set('value',''); // closes current selection
         //search.hide(); // no effect
         //search.show(); // no effect
