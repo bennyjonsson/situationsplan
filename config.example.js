@@ -1,10 +1,10 @@
 define(function(){
     return {
-        baseMap: "https://.../arcgis/rest/services/Bygglov/situationsplan/MapServer",        
-        adressFeatureServer: "https://.../arcgis/rest/services/Fastigheter/Adress_till_fastighet/FeatureServer/0",
-        fastighetFeatureServer: "https://.../arcgis/rest/services/Fastigheter/Alla_fastigheter/FeatureServer/0",
-        printingService: "https://.../arcgis/rest/services/Utskriftstjanster/PrintSituationsplan",
-        mapToPrint: "https://.../arcgis/rest/services/Bygglov/situationsplan/MapServer",
+        baseMap: "[här går din https://... arcgis rest service till MapServer länk]",
+        adressFeatureServer: "[här går din https://... arcgis rest service till FeatureServer/0 länk]",
+        fastighetFeatureServer: "[här går din https://... arcgis rest service till FeatureServer/0 länk]",
+        printingService: "[här går din https://... arcgis rest service till Utskriftstjanster länk]",
+        mapToPrint: "[här går din https://... arcgis rest service till MapServer länk]",
 
         // Layout dataframe width/height
         paperSpace: {
