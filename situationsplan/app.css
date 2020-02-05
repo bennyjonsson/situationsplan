@@ -1,0 +1,83 @@
+html,
+body,
+#map {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#search {
+  display: block;
+  position: absolute;
+  z-index: 2;
+  top: 20px;
+  left: 74px;
+}
+
+#print-form-submit {
+    text-align: center;
+}
+
+#print-result {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#print-loading {
+    margin-top: 20px;
+    text-align: center;
+}
+
+
+.lds-dual-ring {
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 46px;
+  height: 46px;
+  margin: 1px;
+  border-radius: 50%;
+  border: 5px solid black;
+  border-color: black transparent black transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spacing {
+    padding: 20px 20px 20px 20px;
+}
+
+.btn {
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+.zoomTo { display:none; }
+
+#splash-modal {
+    text-align: center;
+}
+
+.searchBtn {
+    background: #5cb85c !important;
+}
+#map_root > div.esriPopup.esriPopupVisible > div.esriPopupWrapper > div:nth-child(1) > div > div.titleButton.maximize {
+  display: none;
+}
+/* .map .logo-med {
+    
+    background-image: url('https://www.lund.se/imagevault/publishedmedia/0z8yqiyida8wi4y8yl6v/Lunds_kommun_logo_vertikal-F-RG.png') !important;
+    height: 72px !important;
+} */
